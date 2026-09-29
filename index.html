@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة متابعة الطالب</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#1b2438;--muted:#6b7590;--line:#e4e8f2;--pri:#3b5bdb;--pri2:#5f7cf5;
+--c1:#e8590c;--c2:#1c7ed6;--c3:#2f9e44;--good:#2f9e44;--bad:#e03131;--soft:#eef2ff;--sh:0 6px 24px rgba(30,45,90,.08)}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1524;--card:#182036;--ink:#eaf0ff;--muted:#9aa6c4;--line:#2a3452;--soft:#1f2a4a;--sh:0 6px 24px rgba(0,0,0,.35);--c1:#ff8a4c;--c2:#5aa9ff;--c3:#5fd07a}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px 40px}
+.top{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:22px 16px 74px}
+.top .in{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.org{font-weight:800;font-size:18px}.sub{opacity:.85;font-size:13px}
+.btn{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}
+.hero{margin-top:-52px;background:var(--card);border-radius:20px;box-shadow:var(--sh);padding:20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.hero .who{flex:1;min-width:180px}
+.hero h1{margin:0 0 2px;font-size:24px}.hero .gr{color:var(--muted);font-size:14px}
+.pill{display:inline-block;border-radius:99px;padding:3px 12px;font-size:13px;font-weight:700;margin-top:8px}
+.gauge{position:relative;width:132px;height:132px}
+.gauge svg{width:100%;height:100%}
+.gauge .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.gauge .t b{font-size:18px}.gauge .t span{font-size:11px;color:var(--muted)}
+h2{font-size:17px;margin:26px 2px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--sh);padding:16px}
+.sc .h{display:flex;justify-content:space-between;align-items:center}
+.sc .nm{font-weight:800;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.lvl{font-size:22px;font-weight:800;margin:6px 0 0}
+.chg{font-size:12.5px;font-weight:700}
+.up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--muted)}
+.note{margin-top:8px;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;white-space:pre-wrap}
+.chartbox{position:relative}
+.chartbox svg{width:100%;height:auto;display:block;direction:ltr}
+.leg{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.leg button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.leg button.off{opacity:.4}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.6;min-width:130px;display:none;z-index:5;direction:rtl}
+.tl{position:relative;padding-right:22px}
+.tl:before{content:"";position:absolute;right:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.ti{position:relative;margin-bottom:12px}
+.ti:before{content:"";position:absolute;right:-22px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--pri);border:3px solid var(--bg)}
+.ti .d{font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.row{display:flex;gap:10px;align-items:flex-start;margin-top:8px;font-size:14px}
+.row .k{min-width:96px;font-weight:700;display:flex;align-items:center;gap:6px}
+.tag{border-radius:99px;padding:1px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.row .txt{color:var(--muted);font-size:13px;white-space:pre-wrap;flex:1}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.two{grid-template-columns:1fr}.hero h1{font-size:21px}}
+.sn h3{margin:0 0 6px;font-size:15px}.sn li{margin:3px 0;font-size:14px}.sn ul{margin:0;padding-right:18px}
+.err{max-width:520px;margin:80px auto;text-align:center;background:var(--card);border-radius:18px;padding:30px;box-shadow:var(--sh)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:26px}
+@media print{body{background:#fff}.btn,.leg{display:none}.top{background:#3b5bdb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.card,.hero{box-shadow:none;border:1px solid #ddd;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const SUBJ=[{n:'اللغة العربية',v:'--c1'},{n:'اللغة الإنجليزية',v:'--c2'},{n:'الرياضيات',v:'--c3'}];
+const LV=['ضعيف','جيد','جيد جداً','ممتاز'];
+const LC=[['#ffe3e3','#c92a2a'],['#fff3bf','#a86400'],['#d3f9d8','#2b8a3e'],['#d0ebff','#1864ab']];
+const MO=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function dl(d,y){const p=d.split('-');return (+p[2])+' '+MO[+p[1]-1]+(y?' '+p[0]:'')}
+function lab(x){return x==null?'—':LV[Math.min(4,Math.max(1,Math.round(x)))-1]}
+function tag(x){if(!x)return '<span class="tag" style="background:var(--soft);color:var(--muted)">—</span>';const c=LC[x-1];return `<span class="tag" style="background:${c[0]};color:${c[1]}">${LV[x-1]}</span>`}
+function ov(e){const a=e.l.filter(x=>x>0);return a.length?a.reduce((p,c)=>p+c,0)/a.length:null}
+function fromB64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+async function decode(h){
+  const m=h.match(/^#d=(z|r)\.(.+)$/);if(!m)throw 0;
+  let u=fromB64u(m[2]);
+  if(m[1]==='z'){const ds=new DecompressionStream('deflate-raw'),w=ds.writable.getWriter();w.write(u);w.close();u=new Uint8Array(await new Response(ds.readable).arrayBuffer())}
+  const o=JSON.parse(new TextDecoder().decode(u));if(!o||!o.ev||!o.ev.length)throw 0;
+  o.ev.sort((a,b)=>a.d.localeCompare(b.d));return o;
+}
+function spark(vals,color){
+  const w=120,h=34,p=4,n=vals.length;if(n<2)return '';
+  const pts=vals.map((v,i)=>[p+i*(w-2*p)/(n-1),h-p-((v||1)-1)/3*(h-2*p)]);
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="direction:ltr"><polyline points="${pts.map(q=>q.join(',')).join(' ')}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${pts[n-1][0]}" cy="${pts[n-1][1]}" r="3.5" fill="${color}"/></svg>`;
+}
+function gaugeSVG(v){
+  const r=54,c=2*Math.PI*r,f=v?(v-1)/3:0;
+  return `<svg viewBox="0 0 132 132"><circle cx="66" cy="66" r="${r}" fill="none" stroke="var(--line)" stroke-width="12"/><circle cx="66" cy="66" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c*f} ${c}" transform="rotate(-90 66 66)"/><defs><linearGradient id="gg"><stop offset="0" stop-color="#5f7cf5"/><stop offset="1" stop-color="#2f9e44"/></linearGradient></defs></svg>`;
+}
+let D,hidden={};
+function chart(){
+  const W=680,H=320,L=70,R=24,T=16,B=44,n=D.ev.length,iw=W-L-R,ih=H-T-B;
+  const X=i=>L+(n===1?iw/2:i*iw/(n-1)),Y=v=>T+ih-((v-1)/3)*ih;
+  let s=`<svg viewBox="0 0 ${W} ${H}" id="ch">`;
+  [1,2,3,4].forEach(v=>{s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cv('--line')}" stroke-dasharray="${v===1?'':'4 5'}"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end" font-size="11.5" fill="${cv('--muted')}">${LV[v-1]}</text>`});
+  D.ev.forEach((e,i)=>{if(n<=8||i%Math.ceil(n/8)===0||i===n-1)s+=`<text x="${X(i)}" y="${H-16}" text-anchor="middle" font-size="11.5" fill="${cv('--muted')}">${dl(e.d)}</text>`});
+  const series=[...SUBJ.map((x,k)=>({k,col:cv(x.v),vals:D.ev.map(e=>e.l[k]||null),w:2.4,dash:''})),{k:'all',col:cv('--pri'),vals:D.ev.map(ov),w:3.6,dash:''}];
+  series.forEach(se=>{
+    if(hidden[se.k])return;
+    let d='',open=false;se.vals.forEach((v,i)=>{if(v==null){open=false;return}d+=(open?'L':'M')+X(i)+' '+Y(v);open=true});
+    if(se.k==='all'){const pts=se.vals.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);if(pts.length>1)s+=`<path d="${d} L${pts[pts.length-1][0]} ${T+ih} L${pts[0][0]} ${T+ih}Z" fill="${se.col}" opacity=".08"/>`}
+    s+=`<path d="${d}" fill="none" stroke="${se.col}" stroke-width="${se.w}" stroke-linecap="round" stroke-linejoin="round"${se.k==='all'?'':' opacity=".9"'}/>`;
+    se.vals.forEach((v,i)=>{if(v!=null)s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="${se.k==='all'?5:3.6}" fill="${se.col}" stroke="${cv('--card')}" stroke-width="2"/>`});
+  });
+  D.ev.forEach((e,i)=>{s+=`<rect data-i="${i}" x="${X(i)-iw/(2*Math.max(n-1,1))}" y="${T}" width="${iw/Math.max(n-1,1)}" height="${ih}" fill="transparent"/>`});
+  return s+'</svg>';
+}
+function drawChart(){
+  $('chartbox').innerHTML=chart()+'<div class="tip" id="tip"></div>';
+  const box=$('chartbox'),tip=$('tip');
+  box.querySelectorAll('rect[data-i]').forEach(r=>{
+    const show=ev=>{const i=+r.dataset.i,e=D.ev[i];
+      tip.innerHTML=`<b>${dl(e.d,1)}</b><br>`+SUBJ.map((x,k)=>hidden[k]?'':`<span class="dot" style="background:${cv(x.v)}"></span> ${x.n}: ${e.l[k]?LV[e.l[k]-1]:'—'}<br>`).join('')+(hidden.all?'':`<b>المستوى العام: ${lab(ov(e))}</b>`);
+      tip.style.display='block';const b=box.getBoundingClientRect(),cx=(ev.touches?ev.touches[0].clientX:ev.clientX)-b.left;
+      tip.style.left=Math.min(Math.max(cx-70,0),b.width-150)+'px';tip.style.top='6px'};
+    r.addEventListener('mousemove',show);r.addEventListener('touchstart',show,{passive:true});r.addEventListener('touchmove',show,{passive:true});
+  });
+  box.addEventListener('mouseleave',()=>tip.style.display='none');
+}
+function toggle(k){hidden[k]=!hidden[k];drawChart();document.querySelectorAll('.leg button').forEach(b=>b.classList.toggle('off',!!hidden[b.dataset.k]))}
+function render(){
+  const ev=D.ev,n=ev.length,last=ev[n-1],prev=n>1?ev[n-2]:null,first=ev[0];
+  const o=ov(last),op=prev?ov(prev):null,ofi=ov(first);
+  const dd=op!=null&&o!=null?o-op:0;
+  const verdict=n<2?'أول تقييم':dd>0.05?'تحسّن مقارنة بالتقييم السابق':dd<-0.05?'يحتاج دعمًا مقارنة بالتقييم السابق':'مستوى مستقر';
+  const vcol=n<2?['var(--soft)','var(--pri)']:dd>0.05?['#d3f9d8','#2b8a3e']:dd<-0.05?['#ffe3e3','#c92a2a']:['var(--soft)','var(--muted)'];
+  const st=SUBJ.map((x,k)=>{const vs=ev.map(e=>e.l[k]||null).filter(Boolean);const a=vs.length?vs[vs.length-1]:null,b=vs.length>1?vs[vs.length-2]:null,f=vs[0];return{k,x,vs,a,b,f,d:a&&b?a-b:0,tot:a&&f?a-f:0}});
+  const strong=st.filter(s=>s.a&&s.a>=3).map(s=>s.x.n),weak=st.filter(s=>s.a&&s.a<=2).map(s=>s.x.n),imp=st.filter(s=>s.tot>0).map(s=>s.x.n);
+  let h=`<div class="top"><div class="in"><div><div class="org">${esc(D.org||'لوحة المتابعة')}</div><div class="sub">لوحة متابعة المستوى الدراسي</div></div><button class="btn" onclick="print()">🖨️ طباعة / PDF</button></div></div><div class="wrap">
+  <div class="hero"><div class="gauge">${gaugeSVG(o)}<div class="t"><b>${lab(o)}</b><span>المستوى العام</span></div></div>
+  <div class="who"><h1>${esc(D.name)}</h1><div class="gr">${esc(D.grade||'')}${D.grade?' • ':''}آخر تقييم: ${dl(last.d,1)} • عدد التقييمات: ${n}</div><span class="pill" style="background:${vcol[0]};color:${vcol[1]}">${verdict}</span></div></div>
+  <h2>المواد الدراسية</h2><div class="grid">`;
+  st.forEach(s=>{const c=cv(s.x.v),ar=s.d>0?'▲':s.d<0?'▼':'●',cls=s.d>0?'up':s.d<0?'down':'flat';
+    const nt=(last.n[s.k]||'').trim();
+    h+=`<div class="card sc"><div class="h"><div class="nm"><span class="dot" style="background:${c}"></span>${s.x.n}</div>${spark(s.vs,c)}</div>
+    <div class="lvl">${s.a?tag(s.a):'—'}</div><div class="chg ${cls}">${ar} ${s.b?(s.d>0?'ارتفع عن التقييم السابق':s.d<0?'انخفض عن التقييم السابق':'ثابت عن التقييم السابق'):'أول تقييم'}</div>
+    ${nt?`<div class="note">${esc(nt)}</div>`:''}</div>`});
+  h+=`</div><h2>تطور المستوى عبر الزمن</h2><div class="card"><div class="chartbox" id="chartbox"></div><div class="leg">${SUBJ.map((x,k)=>`<button data-k="${k}" onclick="toggle(${k})"><span class="dot" style="background:var(${x.v})"></span>${x.n}</button>`).join('')}<button data-k="all" onclick="toggle('all')"><span class="dot" style="background:var(--pri)"></span>المستوى العام</button></div></div>
+  <h2>ملخص</h2><div class="two sn"><div class="card"><h3>💪 نقاط القوة</h3>${strong.length?'<ul>'+strong.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<span class="flat">نعمل على بناء نقاط القوة تدريجيًا</span>'}</div>
+  <div class="card"><h3>🎯 تحتاج متابعة</h3>${weak.length?'<ul>'+weak.map(x=>`<li>${x}</li>`).join('')+'</ul>':'<span class="flat">لا توجد مواد تحتاج دعمًا خاصًا حاليًا</span>'}</div></div>
+  ${n>1&&ofi!=null&&o!=null?`<div class="card" style="margin-top:12px">📈 منذ أول تقييم (${dl(first.d,1)}): ${o-ofi>0.05?'تحسّن المستوى العام':o-ofi<-0.05?'انخفض المستوى العام':'المستوى العام ثابت'}${imp.length?' — تحسّن ملحوظ في: '+imp.join('، '):''}.</div>`:''}
+  <h2>سجل التقييمات</h2><div class="tl">`;
+  [...ev].reverse().forEach(e=>{h+=`<div class="ti card"><div class="d"><span>${dl(e.d,1)}</span><span>${tag(Math.round(ov(e)||0)||0)}</span></div>`+SUBJ.map((x,k)=>`<div class="row"><div class="k"><span class="dot" style="background:var(${x.v})"></span>${x.n}</div><div>${tag(e.l[k])}</div><div class="txt">${esc(e.n[k]||'')}</div></div>`).join('')+'</div>'});
+  h+=`</div><div class="foot">تم إنشاء هذه اللوحة بتاريخ ${D.gen?dl(D.gen,1):''} • ${esc(D.org||'')}<br>هذه الصفحة خاصة بولي الأمر، والبيانات مضمّنة في الرابط ولا يتم رفعها على أي خادم.</div></div>`;
+  $('app').innerHTML=h;document.title='لوحة متابعة '+D.name;drawChart();
+}
+(async()=>{try{D=await decode(location.hash);render();addEventListener('resize',()=>{if(D)drawChart()})}catch(e){$('app').innerHTML='<div class="err"><div style="font-size:42px">🔗</div><h2>الرابط غير مكتمل</h2><p style="color:var(--muted)">تعذّر فتح لوحة المتابعة. تأكد إن الرابط منسوخ بالكامل، أو اطلب من الحضانة إرساله مرة تانية.</p></div>'}})();
+</script>
+</body>
+</html>
