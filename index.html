@@ -129,7 +129,7 @@ function render(){
   const strong=st.filter(s=>s.a&&s.a>=3).map(s=>s.x.n),weak=st.filter(s=>s.a&&s.a<=2).map(s=>s.x.n),imp=st.filter(s=>s.tot>0).map(s=>s.x.n);
   let h=`<div class="top"><div class="in"><div><div class="org">${esc(D.org||'لوحة المتابعة')}</div><div class="sub">لوحة متابعة المستوى الدراسي</div></div><button class="btn" onclick="print()">🖨️ طباعة / PDF</button></div></div><div class="wrap">
   <div class="hero"><div class="gauge">${gaugeSVG(o)}<div class="t"><b>${lab(o)}</b><span>المستوى العام</span></div></div>
-  <div class="who"><h1>${esc(D.name)}</h1><div class="gr">${esc(D.grade||'')}${D.grade?' • ':''}آخر تقييم: ${dl(last.d,1)} • عدد التقييمات: ${n}</div><span class="pill" style="background:${vcol[0]};color:${vcol[1]}">${verdict}</span></div></div>
+  ${D.p?`<img src="data:image/jpeg;base64,${esc(D.p)}" alt="" style="width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid var(--soft);box-shadow:var(--sh)">`:`<div style="width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800">${esc((D.name||"").trim().charAt(0))}</div>`}<div class="who"><h1>${esc(D.name)}</h1><div class="gr">${esc(D.grade||'')}${D.cl?' — '+esc(D.cl):''}${D.grade?' • ':''}آخر تقييم: ${dl(last.d,1)} • عدد التقييمات: ${n}</div><span class="pill" style="background:${vcol[0]};color:${vcol[1]}">${verdict}</span></div></div>
   <h2>المواد الدراسية</h2><div class="grid">`;
   st.forEach(s=>{const c=cv(s.x.v),ar=s.d>0?'▲':s.d<0?'▼':'●',cls=s.d>0?'up':s.d<0?'down':'flat';
     const nt=(last.n[s.k]||'').trim();
@@ -145,7 +145,7 @@ function render(){
   h+=`</div><div class="foot">تم إنشاء هذه اللوحة بتاريخ ${D.gen?dl(D.gen,1):''} • ${esc(D.org||'')}<br>هذه الصفحة خاصة بولي الأمر، والبيانات مضمّنة في الرابط ولا يتم رفعها على أي خادم.</div></div>`;
   $('app').innerHTML=h;document.title='لوحة متابعة '+D.name;drawChart();
 }
-(async()=>{try{D=await decode(location.hash);render();addEventListener('resize',()=>{if(D)drawChart()})}catch(e){$('app').innerHTML='<div class="err"><div style="font-size:42px">🔗</div><h2>الرابط غير مكتمل</h2><p style="color:var(--muted)">تعذّر فتح لوحة المتابعة. تأكد إن الرابط منسوخ بالكامل، أو اطلب من الحضانة إرساله مرة تانية.</p></div>'}})();
+(async()=>{if(!location.hash){$('app').innerHTML='<div class="err"><div style="font-size:42px">📊</div><h2>لوحة متابعة الطالب</h2><p style="color:var(--muted)">الصفحة دي ما بتتفتحش مباشرة، لأن بيانات كل طالب موجودة جوه الرابط نفسه.<br>افتحها من زر «👁️ معاينة اللوحة» في دفتري، أو من الرابط اللي بيوصل لولي الأمر.</p></div>';return}try{D=await decode(location.hash);render();addEventListener('resize',()=>{if(D)drawChart()})}catch(e){$('app').innerHTML='<div class="err"><div style="font-size:42px">🔗</div><h2>الرابط غير مكتمل</h2><p style="color:var(--muted)">تعذّر فتح لوحة المتابعة. تأكد إن الرابط منسوخ بالكامل، أو اطلب من الحضانة إرساله مرة تانية.</p></div>'}})();
 </script>
 </body>
 </html>
